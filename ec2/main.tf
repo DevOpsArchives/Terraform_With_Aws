@@ -3,6 +3,9 @@ resource "aws_key_pair" "ec2_deploy_key" {
   public_key = var.ec2_key_pair_public_key
 }
 
+data "template_file" "initial_installation" {
+  template = file(var.tfl_script)
+}
 resource "aws_instance" "ec2_instance" {
   ami = var.ec2_ami
 
@@ -15,7 +18,7 @@ resource "aws_instance" "ec2_instance" {
   associate_public_ip_address = var.public_ip_association
   ebs_optimized               = var.ebs_optimized
 
-  user_data = file("./data/install.sh")
+  user_data = data.template_file.initial_installation.rendered
 
   tags = {
     Name    = var.instance_name

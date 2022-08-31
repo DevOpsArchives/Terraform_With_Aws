@@ -57,6 +57,12 @@ variable "subnet_id" {
   type    = string
   default = "subnet-001669339a8e71e6e"
 }
+
+variable "tfl_script" {
+  default = "./data/install.tfl"
+  type    = string
+}
+
 ################################################################################
 # EBS Variables
 ################################################################################
