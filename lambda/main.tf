@@ -29,3 +29,33 @@ resource "null_resource" "null" {
     interpreter = ["PowerShell"]
   }
 }
+
+resource "aws_lambda_function" "lambda" {
+  filename      = var.zip_output_path
+  function_name = var.function_name
+  handler       = var.handler
+
+  role = aws_iam_role.Role.arn
+
+  runtime      = var.runtime
+  timeout      = var.timeout
+  memory_size  = var.memory_size
+  package_type = "Zip"
+
+  description = "This is a test lambda"
+
+  depends_on = [
+    data.archive_file.code_archive,
+    aws_cloudwatch_log_group.log,
+    aws_iam_role_policy_attachment.role_policy_attachment,
+  ]
+  environment {
+    variables = {
+      from = "Matrix"
+    }
+  }
+  tags = {
+    Name    = var.function_name
+    Billing = var.function_name
+  }
+}

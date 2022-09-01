@@ -39,10 +39,35 @@ variable "log_group_name" {
 ################################################################################
 variable "zip_source_path" {
   type    = string
-  default = "./data/lambda_handler.py"
+  default = "./data/lambda_function.py"
 }
 
 variable "zip_output_path" {
   type    = string
   default = "./data/code.zip"
+}
+
+variable "function_name" {
+  type    = string
+  default = "Test_Lambda"
+}
+
+variable "handler" {
+  type    = string
+  default = "lambda_function.lambda_handler"
+}
+
+variable "runtime" {
+  type    = string
+  default = "python3.9"
+}
+
+variable "timeout" {
+  type    = number
+  default = 3
+}
+
+variable "memory_size" {
+  type    = number
+  default = 128
 }
