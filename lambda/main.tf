@@ -59,3 +59,9 @@ resource "aws_lambda_function" "lambda" {
     Billing = var.function_name
   }
 }
+
+resource "aws_lambda_invocation" "invocation" {
+  function_name = aws_lambda_function.lambda.function_name
+
+  input = jsonencode({})
+}
