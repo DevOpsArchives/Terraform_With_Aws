@@ -26,3 +26,11 @@ variable "policy_name" {
   type    = string
   default = "Test_Lambda_Policy"
 }
+
+################################################################################
+# CloudWatch Variables
+################################################################################
+variable "log_group_name" {
+  type    = string
+  default = "/aws/lambda/Test_Lambda_Log_Group"
+}
