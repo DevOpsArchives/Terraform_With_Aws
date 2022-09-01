@@ -1,26 +1,29 @@
 init:
-	terraform -chdir=./ec2/ init
+	terraform -chdir=./lambda/ init
+
+upgrade:
+	terraform -chdir=./lambda/ init --upgrade
 
 plan:
-	terraform -chdir=./ec2/ plan -var-file=secrets.tfvars
+	terraform -chdir=./lambda/ plan -var-file=secrets.tfvars
 
 planout:
-	terraform -chdir=./ec2/ plan -out=tffile -var-file=secrets.tfvars
+	terraform -chdir=./lambda/ plan -out=tffile -var-file=secrets.tfvars
 
 apply:
-	terraform -chdir=./ec2/ apply -var-file=secrets.tfvars
+	terraform -chdir=./lambda/ apply -var-file=secrets.tfvars
 
 applyout: planout
-	terraform -chdir=./ec2/ apply "tffile"
+	terraform -chdir=./lambda/ apply "tffile"
 
 apply-approve:
-	terraform -chdir=./ec2/ apply -var-file=secrets.tfvars --auto-approve
+	terraform -chdir=./lambda/ apply -var-file=secrets.tfvars --auto-approve
 
 destroy:
-	terraform -chdir=./ec2/ destroy --auto-approve -var-file=secrets.tfvars
+	terraform -chdir=./lambda/ destroy --auto-approve -var-file=secrets.tfvars
 
 v:
-	terraform -chdir=./ec2/ validate
+	terraform -chdir=./lambda/ validate
 
 f:
-	terraform -chdir=./ec2/ fmt
+	terraform -chdir=./lambda/ fmt
