@@ -12,3 +12,20 @@ resource "aws_cloudwatch_log_group" "log" {
     Billing = var.log_group_name
   }
 }
+
+data "archive_file" "code_archive" {
+  type        = "zip"
+  source_file = var.zip_source_path
+  output_path = var.zip_output_path
+}
+
+resource "null_resource" "null" {
+  triggers = {
+    output_path = "${var.zip_output_path}"
+  }
+  provisioner "local-exec" {
+    when        = destroy
+    command     = "Del ${self.triggers.output_path}"
+    interpreter = ["PowerShell"]
+  }
+}

@@ -1,7 +1,6 @@
 ################################################################################
 # General Variables
 ################################################################################
-
 variable "region" {
   type        = string
   default     = "us-east-1"
@@ -33,4 +32,17 @@ variable "policy_name" {
 variable "log_group_name" {
   type    = string
   default = "/aws/lambda/Test_Lambda_Log_Group"
+}
+
+################################################################################
+# Lambda Variables
+################################################################################
+variable "zip_source_path" {
+  type    = string
+  default = "./data/lambda_handler.py"
+}
+
+variable "zip_output_path" {
+  type    = string
+  default = "./data/code.zip"
 }
