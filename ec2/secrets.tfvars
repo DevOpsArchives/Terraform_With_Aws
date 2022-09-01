@@ -1,0 +1,1 @@
+ec2_key_pair_public_key = "<<INSERT YOU PUBLIC KEY>>"
