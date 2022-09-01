@@ -13,3 +13,16 @@ variable "profile" {
   default     = "self"
   description = "AWS Profile"
 }
+
+################################################################################
+# IAM Variables
+################################################################################
+variable "role_name" {
+  type    = string
+  default = "Test_Lambda_Role"
+}
+
+variable "policy_name" {
+  type    = string
+  default = "Test_Lambda_Policy"
+}
