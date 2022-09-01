@@ -30,18 +30,11 @@ resource "aws_iam_policy" "lambda_logging_policy" {
     "Statement" : [
       {
         "Effect" : "Allow",
-        "Action" : "logs:CreateLogGroup",
-        "Resource" : "arn:aws:logs:${var.region}:${local.account_id}:*"
-      },
-      {
-        "Effect" : "Allow",
         "Action" : [
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        "Resource" : [
-          "${aws_cloudwatch_log_group.log.arn}:*"
-        ]
+        "Resource" : "${aws_cloudwatch_log_group.log.arn}:*"
       },
     ]
   })
