@@ -127,3 +127,15 @@ resource "aws_api_gateway_method_settings" "m_setting" {
     aws_api_gateway_account.account
   ]
 }
+
+resource "aws_api_gateway_gateway_response" "gw_resp_unauthorized" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  status_code   = "401"
+  response_type = "UNAUTHORIZED"
+
+  response_templates = {
+    "application/json" = jsonencode({
+      "message" : "Please use the right api key"
+    })
+  }
+}
