@@ -26,3 +26,15 @@ variable "api_gw_stage_name" {
   type    = string
   default = "dev"
 }
+################################################################################
+# Identity and Access Management Variables
+################################################################################
+variable "api_gw_role_name" {
+  type    = string
+  default = "APIGatewayToCloudWatch"
+}
+
+variable "api_gw_policy_name" {
+  type    = string
+  default = "AmazonAPIGatewayPushToCloudWatchLogsSelf"
+}
