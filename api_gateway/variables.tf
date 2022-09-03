@@ -26,6 +26,11 @@ variable "api_gw_stage_name" {
   type    = string
   default = "dev"
 }
+
+variable "resource_path" {
+  type    = string
+  default = "hello"
+}
 ################################################################################
 # Identity and Access Management Variables
 ################################################################################
