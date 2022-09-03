@@ -108,22 +108,22 @@ resource "aws_api_gateway_stage" "stage" {
   stage_name    = var.api_gw_stage_name
 }
 
-# resource "aws_api_gateway_method_settings" "this" {
-#   rest_api_id = aws_api_gateway_rest_api.api.id
-#   stage_name  = aws_api_gateway_stage.stage.stage_name
-#   method_path = "*/*"
+# This below block might cause problem for those who already have the global account settings enabled
+resource "aws_api_gateway_account" "account" {
+  cloudwatch_role_arn = aws_iam_role.api_gw_role.arn
+}
 
-#   settings {
-#     metrics_enabled = true
-#     logging_level   = "INFO" # FIXME
-#   }
-# }
+resource "aws_api_gateway_method_settings" "m_setting" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  stage_name  = aws_api_gateway_stage.stage.stage_name
+  method_path = "*/*"
 
-# resource "aws_cloudwatch_log_group" "this" {
-#   name              = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.api.id}/${var.api_gw_stage_name}"
-#   retention_in_days = 7
+  settings {
+    metrics_enabled = true
+    logging_level   = "INFO"
+  }
 
-#   depends_on = [
-#     aws_api_gateway_method_settings.this
-#   ]
-# }
+  depends_on = [
+    aws_api_gateway_account.account
+  ]
+}

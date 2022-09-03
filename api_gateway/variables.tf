@@ -34,7 +34,7 @@ variable "api_gw_role_name" {
   default = "APIGatewayToCloudWatch"
 }
 
-variable "api_gw_policy_name" {
+variable "aws_managed_cloudwatch_policy_name" {
   type    = string
-  default = "AmazonAPIGatewayPushToCloudWatchLogsSelf"
+  default = "AmazonAPIGatewayPushToCloudWatchLogs"
 }
