@@ -39,12 +39,12 @@ variable "log_group_name" {
 ################################################################################
 variable "zip_source_path" {
   type    = string
-  default = "./data/lambda_function.py"
+  default = "data/lambda_function.py"
 }
 
 variable "zip_output_path" {
   type    = string
-  default = "./data/code.zip"
+  default = "data/code.zip"
 }
 
 variable "function_name" {

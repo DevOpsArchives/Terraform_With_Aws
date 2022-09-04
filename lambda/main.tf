@@ -15,13 +15,13 @@ resource "aws_cloudwatch_log_group" "log" {
 
 data "archive_file" "code_archive" {
   type        = "zip"
-  source_file = var.zip_source_path
-  output_path = var.zip_output_path
+  source_file = "${path.module}/${var.zip_source_path}"
+  output_path = "${path.module}/${var.zip_output_path}"
 }
 
 resource "null_resource" "null" {
   triggers = {
-    output_path = "${var.zip_output_path}"
+    output_path = "${path.module}/${var.zip_output_path}"
   }
   provisioner "local-exec" {
     when        = destroy
@@ -31,7 +31,7 @@ resource "null_resource" "null" {
 }
 
 resource "aws_lambda_function" "lambda" {
-  filename      = var.zip_output_path
+  filename      = "${path.module}/${var.zip_output_path}"
   function_name = var.function_name
   handler       = var.handler
 
