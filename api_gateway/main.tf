@@ -33,10 +33,16 @@ resource "aws_api_gateway_resource" "resource" {
 }
 
 resource "aws_api_gateway_method" "method" {
-  rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.resource.id
-  http_method   = "GET"
-  authorization = "NONE"
+  rest_api_id      = aws_api_gateway_rest_api.api.id
+  resource_id      = aws_api_gateway_resource.resource.id
+  http_method      = "GET"
+  authorization    = "NONE"
+  api_key_required = var.is_api_key_required
+
+  depends_on = [
+    aws_api_gateway_api_key.api_key
+  ]
+
 }
 
 resource "aws_api_gateway_integration" "integration" {
@@ -89,12 +95,13 @@ resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   description = "Deployment of AWS API Gateway HTTP Rest API"
 
+  depends_on = [
+    aws_api_gateway_method.method,
+    aws_api_gateway_integration.integration
+  ]
+
   triggers = {
-    redeployment = sha1(jsonencode([
-      aws_api_gateway_resource.resource.id,
-      aws_api_gateway_method.method.id,
-      aws_api_gateway_integration.integration.id,
-    ]))
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.api.body))
   }
 
   lifecycle {
@@ -119,11 +126,14 @@ resource "aws_api_gateway_method_settings" "m_setting" {
   method_path = "*/*"
 
   settings {
-    metrics_enabled = true
-    logging_level   = "INFO"
+    metrics_enabled        = true
+    logging_level          = "INFO"
+    throttling_burst_limit = var.burst_limit
+    throttling_rate_limit  = var.rate_limit
   }
 
   depends_on = [
+    aws_api_gateway_deployment.deployment,
     aws_api_gateway_account.account
   ]
 }
@@ -138,4 +148,34 @@ resource "aws_api_gateway_gateway_response" "gw_resp_unauthorized" {
       "message" : "Please use the right api key"
     })
   }
+}
+
+resource "aws_api_gateway_api_key" "api_key" {
+  name        = var.api_key_name
+  description = "API Key for API Gateway"
+
+  provisioner "local-exec" {
+    command = "echo ${aws_api_gateway_api_key.api_key.value} > api_key.txt"
+  }
+}
+
+resource "aws_api_gateway_usage_plan" "usage_plan" {
+  name        = "usage_${var.rest_api_name}"
+  description = "Usage plan for API Gateway"
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.api.id
+    stage  = aws_api_gateway_stage.stage.stage_name
+  }
+
+  throttle_settings {
+    burst_limit = var.burst_limit
+    rate_limit  = var.rate_limit
+  }
+}
+
+resource "aws_api_gateway_usage_plan_key" "usage_plan_key" {
+  key_id        = aws_api_gateway_api_key.api_key.id
+  key_type      = var.usage_plan_key_type
+  usage_plan_id = aws_api_gateway_usage_plan.usage_plan.id
 }

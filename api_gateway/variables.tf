@@ -31,6 +31,31 @@ variable "resource_path" {
   type    = string
   default = "hello"
 }
+
+variable "usage_plan_key_type" {
+  default = "API_KEY"
+  type    = string
+}
+
+variable "burst_limit" {
+  type    = number
+  default = 500
+}
+
+variable "rate_limit" {
+  type    = number
+  default = 1000
+}
+
+variable "api_key_name" {
+  type    = string
+  default = "TestAPIKey"
+}
+
+variable "is_api_key_required" {
+  type    = bool
+  default = true
+}
 ################################################################################
 # Identity and Access Management Variables
 ################################################################################
