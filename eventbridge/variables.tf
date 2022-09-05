@@ -34,7 +34,7 @@ variable "archive_retention" {
 
 variable "event_expression" {
   type    = string
-  default = "rate(5 minute)"
+  default = "rate(1 minute)"
 }
 
 variable "retry_policy" {
