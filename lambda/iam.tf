@@ -30,19 +30,21 @@ resource "aws_iam_policy" "lambda_logging_policy" {
     "Statement" : [
       {
         "Effect" : "Allow",
+        "Action" : "logs:CreateLogGroup",
+        "Resource" : "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:*"
+      },
+      {
+        "Effect" : "Allow",
         "Action" : [
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        "Resource" : "${aws_cloudwatch_log_group.log.arn}:*"
+        "Resource" : [
+          "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.function_name}:*"
+        ]
       },
     ]
   })
-
-  depends_on = [
-    aws_cloudwatch_log_group.log
-  ]
-
 }
 
 resource "aws_iam_role_policy_attachment" "role_policy_attachment" {
