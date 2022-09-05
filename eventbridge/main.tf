@@ -22,20 +22,20 @@ resource "aws_lambda_permission" "lambda_event_permission" {
   ]
 }
 
-# resource "aws_cloudwatch_event_bus" "bus" {
-#   name = var.event_bus_name
-#   tags = {
-#     Name    = var.event_bus_name
-#     Billing = var.event_bus_name
-#   }
-# }
+data "aws_cloudwatch_event_bus" "bus_ds" {
+  name = "default"
+}
 
-# resource "aws_cloudwatch_event_archive" "archive" {
-#   name             = var.event_archive_name
-#   event_source_arn = aws_cloudwatch_event_bus.bus.arn
-#   description      = "All events are stored here"
-#   retention_days   = 7
-# }
+resource "aws_cloudwatch_event_archive" "archive" {
+  name             = var.event_archive_name
+  event_source_arn = data.aws_cloudwatch_event_bus.bus_ds.arn
+  description      = "All events are stored here"
+  retention_days   = 7
+
+  depends_on = [
+    data.aws_cloudwatch_event_bus.bus_ds
+  ]
+}
 
 resource "aws_cloudwatch_event_rule" "rule" {
   name           = var.event_rule_name

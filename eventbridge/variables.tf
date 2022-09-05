@@ -16,12 +16,6 @@ variable "profile" {
 ################################################################################
 # Event Bridge Variables
 ################################################################################
-variable "event_bus_name" {
-  type        = string
-  default     = "TestEventBus"
-  description = "Name for the event bus used to make the eventbridge"
-}
-
 variable "event_archive_name" {
   type    = string
   default = "TestEventArchive"
