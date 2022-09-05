@@ -26,3 +26,20 @@ variable "event_rule_name" {
   default     = "TestEventRule"
   description = "Name of the event rule"
 }
+
+variable "archive_retention" {
+  type    = number
+  default = 7
+}
+
+variable "event_expression" {
+  type    = string
+  default = "rate(5 minute)"
+}
+
+variable "retry_policy" {
+  default = {
+    max_retry_attempts       = 2
+    max_event_age_in_seconds = 60
+  }
+}

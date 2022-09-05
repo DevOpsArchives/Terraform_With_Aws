@@ -30,7 +30,7 @@ resource "aws_cloudwatch_event_archive" "archive" {
   name             = var.event_archive_name
   event_source_arn = data.aws_cloudwatch_event_bus.bus_ds.arn
   description      = "All events are stored here"
-  retention_days   = 7
+  retention_days   = var.archive_retention
 
   depends_on = [
     data.aws_cloudwatch_event_bus.bus_ds
@@ -38,10 +38,10 @@ resource "aws_cloudwatch_event_archive" "archive" {
 }
 
 resource "aws_cloudwatch_event_rule" "rule" {
-  name           = var.event_rule_name
-  description    = "Scheduled rate based evendbridge rule"
+  name        = var.event_rule_name
+  description = "Scheduled rate based evendbridge rule"
 
-  schedule_expression = "rate(1 minute)"
+  schedule_expression = var.event_expression
   is_enabled          = true
 
   tags = {
@@ -51,10 +51,10 @@ resource "aws_cloudwatch_event_rule" "rule" {
 }
 
 resource "aws_cloudwatch_event_target" "target" {
-  rule           = aws_cloudwatch_event_rule.rule.name
-  arn            = module.lambda.function_arn
+  rule = aws_cloudwatch_event_rule.rule.name
+  arn  = module.lambda.function_arn
   retry_policy {
-    maximum_retry_attempts = 2
-    maximum_event_age_in_seconds = 60
+    maximum_retry_attempts       = var.retry_policy.max_retry_attempts
+    maximum_event_age_in_seconds = var.retry_policy.max_event_age_in_seconds
   }
 }
