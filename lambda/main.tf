@@ -4,15 +4,6 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
 }
 
-resource "aws_cloudwatch_log_group" "log" {
-  name              = var.log_group_name
-  retention_in_days = 3
-  tags = {
-    Name    = var.log_group_name
-    Billing = var.log_group_name
-  }
-}
-
 data "archive_file" "code_archive" {
   type        = "zip"
   source_file = "${path.module}/${var.zip_source_path}"
@@ -46,7 +37,6 @@ resource "aws_lambda_function" "lambda" {
 
   depends_on = [
     data.archive_file.code_archive,
-    aws_cloudwatch_log_group.log,
     aws_iam_role_policy_attachment.role_policy_attachment,
   ]
   environment {
