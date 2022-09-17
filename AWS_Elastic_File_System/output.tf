@@ -4,6 +4,6 @@ output "efs_name" {
 }
 
 output "efs_id" {
-  value = aws_efs_file_system.efs.id
+  value       = aws_efs_file_system.efs.id
   description = "ID of Elastic File System"
 }
