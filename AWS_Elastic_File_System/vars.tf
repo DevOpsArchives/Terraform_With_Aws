@@ -43,6 +43,19 @@ variable "backup_policy_status" {
 }
 
 variable "efs_encryption" {
-  type = bool
+  type    = bool
   default = true
+}
+
+variable "subnet_ids" {
+  type = list(string)
+  default = [
+    "subnet-008ec4c2da1e7fc30",
+    "subnet-09141763c78825a7a",
+    "subnet-03277a02e2c1e8833",
+    "subnet-06113abdc0a6d323c",
+    "subnet-0acc0dfb1321afa2e",
+    "subnet-03e25ca9648e1f5c5"
+  ]
+  description = "Default Subnet ID for mount targe"
 }
