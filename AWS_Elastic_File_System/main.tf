@@ -1,11 +1,11 @@
 resource "aws_efs_file_system" "efs" {
-  creation_token   = var.efs_name
-  
+  creation_token = var.efs_name
+
   performance_mode = var.performance_mode
   throughput_mode  = var.throughput_mode
-  
+
   encrypted = var.efs_encryption
-  
+
   tags = {
     Name    = var.efs_name
     Billing = var.efs_name
@@ -18,9 +18,21 @@ resource "aws_efs_file_system" "efs" {
 
 resource "aws_efs_backup_policy" "bck_policy" {
   file_system_id = aws_efs_file_system.efs.id
+
   backup_policy {
     status = var.backup_policy_status
   }
+
+  depends_on = [
+    aws_efs_file_system.efs
+  ]
+}
+
+resource "aws_efs_mount_target" "mount_target" {
+  count = length(var.subnet_ids)
+
+  file_system_id = aws_efs_file_system.efs.id
+  subnet_id      = var.subnet_ids[count.index]
 
   depends_on = [
     aws_efs_file_system.efs
