@@ -36,3 +36,13 @@ resource "aws_db_instance" "rds" {
     Billing = var.db_identifier_name
   }
 }
+
+resource "aws_db_snapshot" "rds_snapshot" {
+  db_instance_identifier = aws_db_instance.rds.id
+  db_snapshot_identifier = var.db_snapshot_identifier
+
+  tags = {
+    Name    = var.db_snapshot_identifier
+    Billing = var.db_snapshot_identifier
+  }
+}

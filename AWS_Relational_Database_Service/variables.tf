@@ -141,3 +141,8 @@ variable "max_allocated_storage" {
   type    = number
   default = 1000
 }
+
+variable "db_snapshot_identifier" {
+  type    = string
+  default = "test-database-identifier"
+}
