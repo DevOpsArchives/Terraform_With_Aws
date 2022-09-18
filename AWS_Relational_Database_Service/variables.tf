@@ -159,7 +159,7 @@ variable "rds_event_name" {
 variable "rds_event_sns_topic_name" {
   type        = string
   default     = ""
-  description = "Set this with proper SNS Topic ARN is skip_rds_event_subscription is setup false"
+  description = "SNS Event Should be Standard type. Set this with proper SNS Topic ARN is skip_rds_event_subscription is setup false"
 }
 
 variable "skip_rds_event_subscription" {
