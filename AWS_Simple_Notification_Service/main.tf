@@ -25,3 +25,9 @@ resource "aws_sns_topic" "sns" {
     Billing = var.sns_topic_name
   }
 }
+
+resource "aws_sns_topic_subscription" "topic_subscription" {
+  topic_arn = aws_sns_topic.sns.arn
+  protocol  = var.topic_subscription_protocol
+  endpoint  = var.topic_subscription_endpoint
+}

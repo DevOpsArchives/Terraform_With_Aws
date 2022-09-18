@@ -23,7 +23,7 @@ variable "sns_topic_name" {
 
 variable "kms_key_id" {
   type    = string
-  default = "eaa3ed72-51a7-4d4f-a5a5-dcb8dd387804"
+  default = "5163017c-e55f-4e0e-8b4f-0c74c7a60319"
 }
 
 variable "minDelayTarget" {
@@ -59,4 +59,14 @@ variable "numMinDelayRetries" {
 variable "backoffFunction" {
   type    = string
   default = "linear"
+}
+
+variable "topic_subscription_protocol" {
+  type    = string
+  default = "sqs"
+}
+
+variable "topic_subscription_endpoint" {
+  type    = string
+  default = null
 }
