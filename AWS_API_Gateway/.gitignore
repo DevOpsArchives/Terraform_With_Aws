@@ -1,0 +1,5 @@
+.terraform/
+.terraform.lock.hcl
+tffile
+data/code.zip
+api_key.txt
