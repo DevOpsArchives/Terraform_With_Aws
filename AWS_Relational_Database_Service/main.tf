@@ -36,3 +36,32 @@ resource "aws_db_instance" "rds" {
     Billing = var.db_identifier_name
   }
 }
+
+resource "aws_db_snapshot" "rds_snapshot" {
+  db_instance_identifier = aws_db_instance.rds.id
+  db_snapshot_identifier = var.db_snapshot_identifier
+
+  tags = {
+    Name    = var.db_snapshot_identifier
+    Billing = var.db_snapshot_identifier
+  }
+}
+
+resource "aws_db_event_subscription" "rds_event_subscription" {
+  count = var.skip_rds_event_subscription ? 1 : 0
+
+  name      = var.rds_event_name
+  sns_topic = var.rds_event_sns_topic_name
+
+  enabled = var.is_event_subscription_enabled
+
+  source_type = var.rds_event_subscription_source_type
+  source_ids  = [aws_db_instance.rds.id]
+
+  event_categories = var.event_categories
+
+  tags = {
+    Name    = var.rds_event_name
+    Billing = var.rds_event_name
+  }
+}

@@ -68,5 +68,11 @@ variable "topic_subscription_protocol" {
 
 variable "topic_subscription_endpoint" {
   type    = string
-  default = null
+  default = ""
+  description = "If Skip subscription is not flase this a value needs to be here or though cli"
+}
+
+variable "skip_subscription" {
+  type = bool
+  default = false
 }
