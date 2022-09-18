@@ -94,7 +94,7 @@ variable "cloudwatch_logs_exports_list" {
 
 variable "deletion_protection" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "monitoring_interval" {
