@@ -142,7 +142,53 @@ variable "max_allocated_storage" {
   default = 1000
 }
 
+
+## RDS Snapshot Variable
 variable "db_snapshot_identifier" {
   type    = string
   default = "test-database-identifier"
+}
+
+
+## RDS Event Subscription Variables
+variable "rds_event_name" {
+  type    = string
+  default = "test-database-event-subscription"
+}
+
+variable "rds_event_sns_topic_name" {
+  type        = string
+  default     = ""
+  description = "Set this with proper SNS Topic ARN is skip_rds_event_subscription is setup false"
+}
+
+variable "skip_rds_event_subscription" {
+  type    = bool
+  default = false
+}
+
+variable "is_event_subscription_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "rds_event_subscription_source_type" {
+  type    = string
+  default = "db-instance"
+}
+
+variable "event_categories" {
+  type = list(string)
+  default = [
+    "availability",
+    "deletion",
+    "failover",
+    "failure",
+    "low storage",
+    "maintenance",
+    "notification",
+    "read replica",
+    "recovery",
+    "restoration",
+  ]
 }
