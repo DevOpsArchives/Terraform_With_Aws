@@ -50,3 +50,8 @@ variable "completion_window" {
   type    = number
   default = 2880
 }
+
+variable "is_resource_enabled" {
+  type    = bool
+  default = true
+}
