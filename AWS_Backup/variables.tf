@@ -55,3 +55,18 @@ variable "is_resource_enabled" {
   type    = bool
   default = true
 }
+
+variable "retention_period" {
+  type    = number
+  default = 35
+}
+
+variable "backup_report_name" {
+  type    = string
+  default = "TestBackupReport"
+}
+
+variable "report_bucket_name" {
+  type    = string
+  default = null
+}

@@ -1,5 +1,7 @@
 # TODO
 # Vault Notifications - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/backup_vault_notifications
+# Backup Selection    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/backup_selection
+# Lock                - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/backup_vault_lock_configuration
 
 module "kms" {
   source = "../AWS_Key_Management_Service"
@@ -92,17 +94,39 @@ resource "aws_backup_plan" "backup_name" {
     rule_name                = var.rule_name
     target_vault_name        = aws_backup_vault.backup_vault.name
     schedule                 = var.schedule_exp
-    enable_continuous_backup = true
-    start_window             = 480
-    completion_window        = 2880
+    enable_continuous_backup = var.continuous_backup
+    start_window             = var.start_window
+    completion_window        = var.completion_window
 
     lifecycle {
-      delete_after = 14
+      delete_after = var.retention_period
     }
   }
 
   tags = {
     Name    = var.backup_plan_name
     Billing = var.backup_plan_name
+  }
+}
+
+resource "aws_backup_report_plan" "report_plan" {
+  name        = var.backup_report_name
+  description = "Report resource configuration for AWS Backup"
+
+  report_delivery_channel {
+    formats = [
+      "CSV",
+      "JSON"
+    ]
+    s3_bucket_name = var.report_bucket_name
+  }
+
+  report_setting {
+    report_template = "RESTORE_JOB_REPORT"
+  }
+
+  tags = {
+    Name    = var.backup_report_name
+    Billing = var.backup_report_name
   }
 }
