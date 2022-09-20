@@ -1,3 +1,6 @@
+# TODO
+# Vault Notifications - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/backup_vault_notifications
+
 module "kms" {
   source = "../AWS_Key_Management_Service"
 }
@@ -32,6 +35,54 @@ resource "aws_backup_vault" "backup_vault" {
     Name   = var.vault_name
     Billig = var.vault_name
   }
+}
+
+resource "aws_backup_vault_policy" "vault_policy" {
+  backup_vault_name = aws_backup_vault.backup_vault.name
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Id" : "default",
+    "Statement" : [
+      {
+        "Sid" : "DenyActions",
+        "Effect" : "Deny",
+        "Principal" : {
+          "AWS" : "*"
+        },
+        "Action" : [
+          "backup:DeleteBackupVault",
+          "backup:DeleteBackupVaultAccessPolicy",
+          "backup:DeleteRecoveryPoint",
+          "backup:StartCopyJob",
+          "backup:StartRestoreJob",
+          "backup:UpdateRecoveryPointLifecycle"
+        ],
+        "Resource" : "${aws_backup_vault.backup_vault.arn}"
+      },
+      {
+        "Sid" : "AllowActions",
+        "Effect" : "Allow",
+        "Principal" : {
+          "AWS" : "*"
+        },
+        "Action" : [
+          "backup:DescribeBackupVault",
+          "backup:PutBackupVaultAccessPolicy",
+          "backup:GetBackupVaultAccessPolicy",
+          "backup:StartBackupJob",
+          "backup:GetBackupVaultNotifications",
+          "backup:PutBackupVaultNotifications"
+        ],
+        "Resource" : "${aws_backup_vault.backup_vault.arn}"
+      }
+    ]
+  })
+
+  depends_on = [
+    aws_backup_vault.backup_vault
+  ]
+
 }
 
 resource "aws_backup_plan" "backup_name" {
