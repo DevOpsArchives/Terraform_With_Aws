@@ -53,8 +53,6 @@ resource "aws_backup_vault_policy" "vault_policy" {
           "AWS" : "*"
         },
         "Action" : [
-          "backup:DeleteBackupVault",
-          "backup:DeleteBackupVaultAccessPolicy",
           "backup:DeleteRecoveryPoint",
           "backup:StartCopyJob",
           "backup:StartRestoreJob",
@@ -69,6 +67,8 @@ resource "aws_backup_vault_policy" "vault_policy" {
           "AWS" : "*"
         },
         "Action" : [
+          "backup:DeleteBackupVault",
+          "backup:DeleteBackupVaultAccessPolicy",
           "backup:DescribeBackupVault",
           "backup:PutBackupVaultAccessPolicy",
           "backup:GetBackupVaultAccessPolicy",
@@ -110,6 +110,8 @@ resource "aws_backup_plan" "backup_name" {
 }
 
 resource "aws_backup_report_plan" "report_plan" {
+  count = var.report_bucket_name == null ? 0 : 1
+
   name        = var.backup_report_name
   description = "Report resource configuration for AWS Backup"
 
