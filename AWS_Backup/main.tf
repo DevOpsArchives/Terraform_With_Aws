@@ -1,7 +1,6 @@
 # TODO
 # Vault Notifications - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/backup_vault_notifications
-# Backup Selection    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/backup_selection
-# Lock                - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/backup_vault_lock_configuration
+# Backup Selection    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/backup_selection 
 
 module "kms" {
   source = "../AWS_Key_Management_Service"
@@ -53,8 +52,6 @@ resource "aws_backup_vault_policy" "vault_policy" {
           "AWS" : "*"
         },
         "Action" : [
-          "backup:DeleteBackupVault",
-          "backup:DeleteBackupVaultAccessPolicy",
           "backup:DeleteRecoveryPoint",
           "backup:StartCopyJob",
           "backup:StartRestoreJob",
@@ -69,6 +66,8 @@ resource "aws_backup_vault_policy" "vault_policy" {
           "AWS" : "*"
         },
         "Action" : [
+          "backup:DeleteBackupVault",
+          "backup:DeleteBackupVaultAccessPolicy",
           "backup:DescribeBackupVault",
           "backup:PutBackupVaultAccessPolicy",
           "backup:GetBackupVaultAccessPolicy",
@@ -110,6 +109,8 @@ resource "aws_backup_plan" "backup_name" {
 }
 
 resource "aws_backup_report_plan" "report_plan" {
+  count = var.report_bucket_name == null ? 0 : 1
+
   name        = var.backup_report_name
   description = "Report resource configuration for AWS Backup"
 
@@ -129,4 +130,16 @@ resource "aws_backup_report_plan" "report_plan" {
     Name    = var.backup_report_name
     Billing = var.backup_report_name
   }
+}
+
+resource "aws_backup_vault_lock_configuration" "vault_lock" {
+  count               = var.need_lock ? 1 : 0
+  backup_vault_name   = aws_backup_vault.backup_vault.name
+  changeable_for_days = 3
+  max_retention_days  = 365
+  min_retention_days  = 7
+
+  depends_on = [
+    aws_backup_vault.backup_vault
+  ]
 }

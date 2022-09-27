@@ -70,3 +70,24 @@ variable "report_bucket_name" {
   type    = string
   default = null
 }
+
+# Vault lock config
+variable "changeable_for_days" {
+  type    = number
+  default = 3
+}
+
+variable "max_retention_days" {
+  type    = number
+  default = 365
+}
+
+variable "min_retention_days" {
+  type    = number
+  default = 7
+}
+
+variable "need_lock" {
+  type    = bool
+  default = false
+}
